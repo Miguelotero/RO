@@ -1,5 +1,11 @@
 import java.io.BufferedReader;
-public static void main(String[] args) throws FileNotFoundException, IOException {
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class HelloWorld {
+
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 		// TODO Auto-generated method stub
 
 		System.out.println("Hello world!");
@@ -8,11 +14,13 @@ public static void main(String[] args) throws FileNotFoundException, IOException
 	
 	 public static String leeProverbio(String archivo) throws FileNotFoundException, IOException {
 	      String proverbio = null;
-	      int limite=10;
-	      int numAleatorio = (int) (Math.random()*limite+1);
-	      
+	      int limite=0;
 	      FileReader f = new FileReader(archivo);
 	      BufferedReader b = new BufferedReader(f);
+	      while( b.readLine() != null){
+	    	  limite++;
+	      }
+	      int numAleatorio = (int) (Math.random()*limite+1);
 	      for(int i = 0; i < numAleatorio; i++){
 	    	  proverbio = b.readLine();
 	      }
