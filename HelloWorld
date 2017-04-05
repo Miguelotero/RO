@@ -14,11 +14,15 @@ public class HelloWorld {
 	
 	 public static void leeProverbio(String archivo) throws FileNotFoundException, IOException {
 	      String proverbio;
+	      int limite=10;
+	      int numAleatorio = (int) (Math.random()*limite+1);
+	      
 	      FileReader f = new FileReader(archivo);
 	      BufferedReader b = new BufferedReader(f);
-	      while((proverbio = b.readLine())!=null) {
-	          System.out.println(proverbio);
+	      for(int i = 0; i < numAleatorio; i++){
+	    	  proverbio = b.readLine();
 	      }
+	      
 	      b.close();
 	}
 
