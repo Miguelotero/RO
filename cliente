@@ -1,0 +1,65 @@
+
+public class cliente {
+
+  // Los argumentos proporcionan el mensaje y el nombre del servidor
+  public static void main(String args[]) {
+   if(args[0].equals("-udp")){
+	   clienteudp(args[0],args[1],Integer.parseInt(args[2]));
+   
+   }
+   else{
+	   clientetcp(args[0],args[1],Integer.parseInt(args[2]));
+   }
+  }
+
+private static void clientetcp(String tipo, String ip, int puerto) {
+	// TODO Auto-generated method stub
+	while (true) {
+		// Socket cliente; Argumentos: IP y puerto
+
+		Socket sock = new Socket(ip, puerto);
+		BufferedReader entrada = new BufferedReader(new InputStreamReader(
+				sock.getInputStream()));
+
+		// Imprime mensaje
+		System.out.println(entrada.readLine());
+
+	}
+}
+
+
+private static void clienteudp(String tipo, String ip, int puertoServidor) {
+	// TODO Auto-generated method stub
+	 try {
+	      DatagramSocket socketUDP = new DatagramSocket();
+	      byte[] mensaje = tipo.getBytes();
+	      InetAddress hostServidor = InetAddress.getByName(ip);
+	    
+
+	      // Construimos un datagrama para enviar el mensaje al servidor
+	      DatagramPacket peticion =
+	        new DatagramPacket(mensaje, tipo.length(), hostServidor, puertoServidor);
+
+	      // Enviamos el datagrama
+	      socketUDP.send(peticion);
+
+	      // Construimos el DatagramPacket que contendrá la respuesta
+	      byte[] bufer = new byte[1000];
+	      DatagramPacket respuesta = new DatagramPacket(bufer, bufer.length);
+	      socketUDP.receive(respuesta);
+
+	      // imprime mensaje
+	      System.out.println("Respuesta: " + new String(respuesta.getData()));
+
+	      // Cerramos el socket
+	      socketUDP.close();
+
+	    } catch (SocketException e) {
+	      System.out.println("Socket: " + e.getMessage());
+	    } catch (IOException e) {
+	      System.out.println("IO: " + e.getMessage());
+	    }
+}
+
+
+}
