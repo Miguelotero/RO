@@ -2,7 +2,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 public class Servidor {
-
+public static String aux="";
 	public static void main(String args[]) {
 
 		try {
@@ -10,12 +10,16 @@ public class Servidor {
 			DatagramSocket socketUDP = new DatagramSocket(
 					Integer.parseInt(args[0]));
 			byte[] bufer = new byte[1000];
-
+			// Construimos el DatagramPacket para recibir peticiones
+			DatagramPacket peticion = new DatagramPacket(bufer,	bufer.length);
 //			ServerSocket serv = new ServerSocket(Integer.parseInt(args[0]));
 	//		Socket so = new Socket();
+		    aux=args[1];
+			ArrayList<String> probs= leearchivo(args[1]);
+
 			while (true) {
-				// Construimos el DatagramPacket para recibir peticiones
-				DatagramPacket peticion = new DatagramPacket(bufer,	bufer.length);
+				
+				
 
 				// Leemos una petición del DatagramSocket
 				socketUDP.receive(peticion);
@@ -24,7 +28,9 @@ public class Servidor {
 			
 				System.out.print("\nFlaaaaaaaaaaaaaaaaaaaaaaag: "+str1+"\n");
 					//obtenemos proverbio
-					String pro=leeProverbio(args[1]);
+				
+			      int numaleatorio = (int) (Math.random()*(probs.size()-1)+1);		    	
+				String pro = probs.get(numaleatorio);
 					// Construimos el DatagramPacket para enviar la respuesta							
 					byte[] proverbi = pro.getBytes();
 					DatagramPacket respuesta = new DatagramPacket(proverbi, proverbi.length,	peticion.getAddress(), peticion.getPort());
@@ -59,27 +65,31 @@ public class Servidor {
 
 			// Inicialización del socket con puerto como parámetro de entrada
 
-			ServerSocket serv = new ServerSocket(Integer.parseInt(puerto));
-			Socket so = new Socket();
-
+			
 			// Servidor siempre esperando conexión
-
+		 ServerSocket serv = new ServerSocket(Integer.parseInt(puerto));
+			
+			Socket so = new Socket();
 			while (true) {
+				
 
+                 
 				so = serv.accept();
 
 				// Inicia hilo
 
 				thread cliThread = new thread(so);
 				cliThread.start();
+						
 
 			}
+			
 		}
-		// TODO Auto-generated method stub
+		
 		
 	
 
-	public static String leeProverbio(String archivo) throws FileNotFoundException, IOException {
+	public static ArrayList<String> leearchivo(String archivo) throws FileNotFoundException, IOException {
 		
 	      String proverbio = "";
 	      ArrayList<String> probs= new ArrayList<String>();
@@ -94,3 +104,20 @@ public class Servidor {
 	    	   probs.add(proverbio);
 	       }
 	     }
+	      
+
+		
+		
+	      int numaleatorio = (int) (Math.random()*(probs.size()-1)+1);
+	    
+	      proverbio = probs.get(numaleatorio);;
+	      b.close();
+	      return probs;
+}
+	
+	
+	}
+
+
+		
+
