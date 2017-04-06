@@ -1,0 +1,83 @@
+import java.net.*;
+import static java.lang.System.out;
+import java.io.*;
+
+public class cliente {
+
+	// Los argumentos proporcionan el mensaje y el nombre del servidor
+	public static void main(String args[]) {
+		try {
+			DatagramSocket socketUDP = new DatagramSocket();
+			byte[] mensaje = "1".getBytes();
+			if (args[0].equals("-udp")) {
+				mensaje = "hola".getBytes();
+
+			}
+
+			InetAddress hostServidor = InetAddress.getByName(args[1]);
+
+			// Construimos un datagrama para enviar el mensaje al servidor
+			DatagramPacket peticion = new DatagramPacket(mensaje,
+					mensaje.length, hostServidor, Integer.parseInt(args[2]));
+
+			// Enviamos el datagrama
+			socketUDP.send(peticion);
+
+			// Construimos el DatagramPacket que contendrá la respuesta
+			byte[] bufer = new byte[1000];
+			DatagramPacket respuesta = new DatagramPacket(bufer, bufer.length);
+			socketUDP.receive(respuesta);
+
+			if (args[0].equals("-udp")) {
+				System.out.println(new String(respuesta.getData()));
+
+			} else {
+				while (true) {
+					// Socket cliente; Argumentos: IP y puerto
+
+					Socket sock = new Socket(args[1], Integer.parseInt(args[2]));
+					BufferedReader entrada = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+
+					// Imprime respuesta
+					System.out.println("\nFlaaaaaaaaaaaaaaaaaaaag: 3\n");
+					out.println(entrada.readLine());
+					System.out.println("\nFlaaaaaaaaaaaaaaaaaaaag: 4\n");
+				}
+			}
+		} catch (SocketException e) {
+			System.out.println("Socket: " + e.getMessage());
+		} catch (IOException e) {
+			System.out.println("IO: " + e.getMessage());
+		}
+	}
+	
+	private static void clienteudp(String tipo, String ip, int puertoServidor) {
+		// TODO Auto-generated method stub
+		try {
+			DatagramSocket socketUDP = new DatagramSocket();
+			byte[] mensaje = "hola".getBytes();
+			InetAddress hostServidor = InetAddress.getByName(ip);
+			
+			// Construimos un datagrama para enviar el mensaje al servidor
+			DatagramPacket peticion = new DatagramPacket(mensaje,mensaje.length, hostServidor, puertoServidor);
+
+			// Enviamos el datagrama
+			socketUDP.send(peticion);
+
+			// Construimos el DatagramPacket que contendrá la respuesta
+			byte[] bufer = new byte[1000];
+			DatagramPacket respuesta = new DatagramPacket(bufer, bufer.length);
+			socketUDP.receive(respuesta);
+
+			// imprime mensaje
+			System.out.println(new String(respuesta.getData()));
+
+			// Cerramos el socket
+			socketUDP.close();
+
+		} catch (SocketException e) {
+			System.out.println("Socket: " + e.getMessage());
+		} catch (IOException e) {
+			System.out.println("IO: " + e.getMessage());
+		}
+	}
