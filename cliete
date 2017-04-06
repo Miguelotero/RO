@@ -1,4 +1,6 @@
 import java.net.*;
+import java.util.Scanner;
+
 import static java.lang.System.out;
 import java.io.*;
 
@@ -32,16 +34,24 @@ public class cliente {
 				System.out.println(new String(respuesta.getData()));
 
 			} else {
+				String cadena="";
+				Scanner sc=new Scanner(System.in);
 				while (true) {
 					// Socket cliente; Argumentos: IP y puerto
-
+                  cadena=sc.nextLine();
+                 
 					Socket sock = new Socket(args[1], Integer.parseInt(args[2]));
 					BufferedReader entrada = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-
+				 	 
 					// Imprime respuesta
-					System.out.println("\nFlaaaaaaaaaaaaaaaaaaaag: 3\n");
+				    if(cadena.equals("fin")){
+                   	 sc.close();
+                   	 sock.close();
+                      break;}
+					
 					out.println(entrada.readLine());
-					System.out.println("\nFlaaaaaaaaaaaaaaaaaaaag: 4\n");
+					sock.close();
+				
 				}
 			}
 		} catch (SocketException e) {
@@ -51,7 +61,7 @@ public class cliente {
 		}
 	}
 	
-	private static void clienteudp(String tipo, String ip, int puertoServidor) {
+	/*private static void clienteudp(String tipo, String ip, int puertoServidor) {
 		// TODO Auto-generated method stub
 		try {
 			DatagramSocket socketUDP = new DatagramSocket();
@@ -80,4 +90,6 @@ public class cliente {
 		} catch (IOException e) {
 			System.out.println("IO: " + e.getMessage());
 		}
-	}
+	}*/
+
+}
