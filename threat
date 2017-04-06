@@ -1,0 +1,46 @@
+import static java.lang.System.out;
+
+import java.util.*;
+import java.io.*;
+import java.net.*;
+
+class thread extends Thread {
+	Socket myClientSocket;
+	boolean m_bRunThread = true;
+
+	public thread() {
+		super();
+	}
+
+	thread(Socket so) {
+		myClientSocket = so;
+
+	}
+
+	public void run() {
+
+		try {
+			
+
+			BufferedOutputStream buffsalida;
+			buffsalida = new BufferedOutputStream(
+					myClientSocket.getOutputStream());
+			PrintWriter salida = new PrintWriter(buffsalida, false);
+
+			ArrayList<String> probs= Servidor.leearchivo(Servidor.aux);
+			
+			int i= (int) (Math.random()*(probs.size()-1)+1);	
+			String proverbio = probs.get(i);
+		
+			salida.println(proverbio);
+			salida.flush();
+		
+			
+			myClientSocket.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+}
