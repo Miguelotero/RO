@@ -1,0 +1,96 @@
+import java.net.*;
+import java.util.*;
+import java.io.*;
+public class Servidor {
+
+	public static void main(String args[]) {
+
+		try {
+
+			DatagramSocket socketUDP = new DatagramSocket(
+					Integer.parseInt(args[0]));
+			byte[] bufer = new byte[1000];
+
+//			ServerSocket serv = new ServerSocket(Integer.parseInt(args[0]));
+	//		Socket so = new Socket();
+			while (true) {
+				// Construimos el DatagramPacket para recibir peticiones
+				DatagramPacket peticion = new DatagramPacket(bufer,	bufer.length);
+
+				// Leemos una petición del DatagramSocket
+				socketUDP.receive(peticion);
+				
+				String str1 = new String(peticion.getData());
+			
+				System.out.print("\nFlaaaaaaaaaaaaaaaaaaaaaaag: "+str1+"\n");
+					//obtenemos proverbio
+					String pro=leeProverbio(args[1]);
+					// Construimos el DatagramPacket para enviar la respuesta							
+					byte[] proverbi = pro.getBytes();
+					DatagramPacket respuesta = new DatagramPacket(proverbi, proverbi.length,	peticion.getAddress(), peticion.getPort());
+					// Enviamos la respuesta
+					socketUDP.send(respuesta);
+				
+				if(peticion.getLength()!=4){
+					servidortcp(args[0]);
+					/*while(true){
+				
+					so = serv.accept();
+
+					// Inicia hilo
+
+					thread cliThread = new thread(so);
+					cliThread.start();
+					}*/
+				}
+			}
+
+		} catch (SocketException e) {
+			System.out.println("Socket: " + e.getMessage());
+		} catch (IOException e) {
+			System.out.println("IO: " + e.getMessage());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	 private static void servidortcp(String puerto) throws Exception {
+
+			// Inicialización del socket con puerto como parámetro de entrada
+
+			ServerSocket serv = new ServerSocket(Integer.parseInt(puerto));
+			Socket so = new Socket();
+
+			// Servidor siempre esperando conexión
+
+			while (true) {
+
+				so = serv.accept();
+
+				// Inicia hilo
+
+				thread cliThread = new thread(so);
+				cliThread.start();
+
+			}
+		}
+		// TODO Auto-generated method stub
+		
+	
+
+	public static String leeProverbio(String archivo) throws FileNotFoundException, IOException {
+		
+	      String proverbio = "";
+	      ArrayList<String> probs= new ArrayList<String>();
+	    
+	      FileReader f = new FileReader(archivo);
+	      BufferedReader b = new BufferedReader(f);
+	  
+	     
+	     while (proverbio!=null) {
+	       proverbio=b.readLine();
+	       if(proverbio!=null){
+	    	   probs.add(proverbio);
+	       }
+	     }
